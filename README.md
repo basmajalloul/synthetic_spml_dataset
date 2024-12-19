@@ -13,6 +13,13 @@ The dataset consists of **500 pose pairs** categorized into four similarity leve
 | **50%**              | 125             | Moderately different poses with clear joint angle changes. |
 | **25%**              | 125             | Blatantly different poses with significant variations. |
 
+## Similarity Comparison
+
+The figure below showcases a sample pose pair for each similarity level (25%, 50%, 75%, and 100%).
+
+![Similarity Comparison](similarity_comparison.png)
+
+
 ### File Structure
 The dataset is organized into subfolders based on similarity levels:
 
