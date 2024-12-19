@@ -76,7 +76,7 @@ def save_pose_pair(base_pose, modified_pose, similarity, pair_id):
     print(f"Saved pose pair {pair_id} in {similarity_folder}.")
 
 # Visualize a single pose using Open3D
-def visualize_pose(vertices, faces, color, output_path=None):
+def visualize_pose_with_subfolders(vertices, faces, color, similarity_level, pair_id, pose_type):
     # Ensure vertices is a NumPy array
     if isinstance(vertices, torch.Tensor):
         vertices = vertices.detach().cpu().numpy()
@@ -100,14 +100,19 @@ def visualize_pose(vertices, faces, color, output_path=None):
     vis.poll_events()
     vis.update_renderer()
 
-    if output_path:
-        vis.capture_screen_image(output_path)
-        print(f"Pose image saved to {output_path}")
+    # Create subfolder for the similarity level
+    similarity_folder = os.path.join("pose_pairs_images", f"similarity_{similarity_level}")
+    os.makedirs(similarity_folder, exist_ok=True)
+
+    # Save the image
+    output_path = os.path.join(similarity_folder, f"pose_pair_{pair_id}_{pose_type}.png")
+    vis.capture_screen_image(output_path)
+    print(f"Pose image saved to {output_path}")
 
     vis.destroy_window()
 
 
-
+# Main loop for generating pose pairs with images saved into subfolders
 if __name__ == "__main__":
     smpl = initialize_smpl()
 
@@ -133,14 +138,12 @@ if __name__ == "__main__":
         )
         modified_vertices = modified_output.vertices.detach().cpu().numpy()[0]
 
-        os.makedirs("pose_pairs_images", exist_ok=True)
-
-        # Visualize the poses
-        visualize_pose(
-            base_vertices, smpl.faces, [1, 0, 0], output_path=f"pose_pairs_images/base_pose_{i + 1}.png"
+        # Visualize and save poses into subfolders
+        visualize_pose_with_subfolders(
+            base_vertices, smpl.faces, [1, 0, 0], similarity, pair_id=i + 1, pose_type="left"
         )
-        visualize_pose(
-            modified_vertices, smpl.faces, [0, 1, 0], output_path=f"pose_pairs_images/modified_pose_{i + 1}.png"
+        visualize_pose_with_subfolders(
+            modified_vertices, smpl.faces, [0, 1, 0], similarity, pair_id=i + 1, pose_type="right"
         )
 
 
