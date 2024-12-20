@@ -34,8 +34,13 @@ pose_pairs/
     similarity_50/
     similarity_25/
 pose_pairs_images/
-    base_pose_1.png
-    modified_pose_1.png
+    similarity_100/
+        pose_pair_1_left.png
+        pose_pair_1_right.png
+        ...
+    similarity_75/
+    similarity_50/
+    similarity_25/
     ...
 scripts/
     generate_pose_pairs.py
